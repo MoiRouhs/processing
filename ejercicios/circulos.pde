@@ -2,7 +2,6 @@
 void setup (){
     size(500,500);
     frameRate(500);
-    f = createFont("Arial",16,true);
 };
 
 void draw (){

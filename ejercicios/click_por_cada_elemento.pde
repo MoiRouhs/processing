@@ -1,5 +1,5 @@
 int r = 50; // cantidad de circulos a crear
-int tam = 50; 77 tamaño de los circulos
+int tam = 50; // tamaño de los circulos
 Circulo[] cir = new Circulo[r]; //se crea un conjuntos de "r" circulos
 
 void setup(){

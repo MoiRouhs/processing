@@ -1,7 +1,7 @@
 int tamano = 0;
 int cant = 20;
 Cuadro[][] cu = new Cuadro[cant][cant];
-PintarCuadro pintc;
+PintarCuadro pintc1, pintc2;
 
 void setup(){
   size(500,500);
@@ -12,7 +12,8 @@ void setup(){
       cu[i][j]= new Cuadro(tamano, i,j);
     }
   }
-  pintc = new PintarCuadro(cu,(cant - 1));
+  pintc1 = new PintarCuadro(cu,(cant - 1));
+  pintc2 = new PintarCuadro(cu,(cant - 1));
 }
 
 void draw(){
@@ -23,16 +24,19 @@ void draw(){
       cu[i][j].crear();
     }
   }
-  if(frameCount % 17 == 0){
-    pintc.andar(#F111F0);
+  if(frameCount % 2 == 0){
+    pintc1.andar(#F111F0);
+    pintc1.estela(2);
+    pintc2.andar(#FFCC00);
+    pintc2.estela(12);
   }
 }
 
 class Cuadro{
-  public color c = #FFCC00;
+  public color c = #FFFFFF;
   public int tamano;
-  public int px;
-  public int py;
+  int px;
+  int py;
   
  Cuadro(int tam, int x, int y){
     tamano = tam;
@@ -65,31 +69,54 @@ class Cuadro{
 }
 
 class PintarCuadro{
-  public Cuadro actual;
-  public Cuadro anterior;
-  public Cuadro[][] matrix;
-  public ArrayList<Cuadro> pintados = new ArrayList<Cuadro>();
-  public int cantidad;
+  private Cuadro actual;
+  private Cuadro anterior;
+  private Cuadro[][] matrix;
+  private ArrayList<Cuadro> pintados = new ArrayList<Cuadro>();
+  private int cantidad;
 
   
   PintarCuadro(Cuadro[][] matris,int cant){
     cantidad = cant;
     matrix = matris;
+
   }  
   void andar(color c){
-
+    int px = 0;
+    int py = 0;
+      System.out.println(pintados.size());
     if(pintados.size() == 0){
       actual = matrix[Math.round(random(cantidad))][Math.round(random(cantidad))];
-      actual.c = c;
-      //System.out.println(actual);
-      pintados.add(actual);
     }else{
-      anterior = actual;
-      if(pintados.get(pintados.size() - 1) == anterior){
-        System.out.println("Si");
-      }
-      actual = matrix[anterior.px + 1][anterior.py];
-      actual.c = c;
+      anterior = pintados.get(pintados.size() - 1);
+      px = anterior.px;
+      py = anterior.py;
+        
+      do{
+        do{  
+          do{
+            px = anterior.px + Math.round(random(-1,1));
+          }while(px < 0 || px > cantidad);
+          if(px == anterior.px){
+            do{
+              py = anterior.py + Math.round(random(-1,1));
+            }while(py == anterior.py || py < 0 || py > cantidad);
+          };
+          actual = matrix[px][py];
+        }while(actual == pintados.get(pintados.size() - 1));
+      }while(pintados.contains(actual));
+      
     }
+          
+      pintados.add(actual);
+      actual.c = c;
+      System.out.println(pintados.size());
   }
+  
+  void estela(int extension){
+    if(pintados.size() >= extension){
+      pintados.remove(0);
+    };
+  
+  };
 }
